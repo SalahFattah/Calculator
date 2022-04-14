@@ -16,21 +16,23 @@ function divide(a,b){
 
 function operate(operator,a,b){
     switch(operator){
-        case "add":
+        case "+":
             return add(a,b);
             
-        case "substract":
+        case "-":
             return substract(a,b);
             
-        case "multiply":
+        case "x":
             return multiply(a,b);
             
-        case "divide":
+        case "/":
             return divide(a,b);
             
     }
 
 }
+
+
 
 //Creating elements
 let calcElements=document.querySelector(".operators");
@@ -47,14 +49,17 @@ function createElements(){
             case i==0&&j==0:
                 elem.textContent="(";
                 elem.classList.add("left-parenthesis");
+                elem.classList.add("operator");
                 break;
             case i==0&&j==1:
                 elem.textContent=")";
                 elem.classList.add("right-parenthesis");
+                elem.classList.add("operator");
                 break;
             case i==0&&j==2:
                 elem.textContent="%";
                 elem.classList.add("percentage");
+                elem.classList.add("operator");
                 break;
             case i==0&&j==3:
                 elem.textContent="AC";
@@ -63,67 +68,60 @@ function createElements(){
 
             case i==1&&j==0:
                 elem.textContent=num;
-                // elem.classList.add("seven");
                 num++;
                 break;
             case i==1&&j==1:
                 elem.textContent=num;
-                // elem.classList.add("right-parenthesis");
                 num++;
                 break;
             case i==1&&j==2:
                 elem.textContent=num;
-                // elem.classList.add("percentage");
                 num-=5;
                 break;
             case i==1&&j==3:
                 elem.textContent="/";
                 elem.classList.add("divide");
+                elem.classList.add("operator");
                 break;
 
             case i==2&&j==0:
                 elem.textContent=num;
-                // elem.classList.add("left-parenthesis");
                 num++;
                 break;
             case i==2&&j==1:
                 elem.textContent=num;
-                // elem.classList.add("right-parenthesis");
                 num++;
                 break;
             case i==2&&j==2:
                 elem.textContent=num;
                 num-=5;
-                // elem.classList.add("percentage");
                 break;
             case i==2&&j==3:
                 elem.textContent="x";
-                elem.classList.add("multiply");   
+                elem.classList.add("multiply");  
+                elem.classList.add("operator"); 
                 break;
 
             case i==3&&j==0:
                 elem.textContent=num;
-                // elem.classList.add("left-parenthesis");
                 num++;
                 break;
             case i==3&&j==1:
                 elem.textContent=num;
-                // elem.classList.add("right-parenthesis");
                 num++;
                 break;
             case i==3&&j==2:
                 elem.textContent=num;
-                // elem.classList.add("percentage");
                 num-=5;
                 break;
             case i==3&&j==3:
                 elem.textContent="-";
                 elem.classList.add("substract");
+                elem.classList.add("operator");
                 break;
                 
             case i==4&&j==0:
                 elem.textContent=0;
-                // elem.classList.add("left-parenthesis");
                 break;
             case i==4&&j==1:
                 elem.textContent=".";
@@ -132,14 +130,70 @@ function createElements(){
             case i==4&&j==2:
                 elem.textContent="=";
                 elem.classList.add("equal");
+                // elem.classList.add("operator");
                 break;
             case i==4&&j==3:
                 elem.textContent="+";
                 elem.classList.add("add");
+                elem.classList.add("operator");
         }
     }
-    // elem.textContent=i;
 
 }
 }
 createElements();
+
+let display=document.createElement("span");
+document.querySelector(".result").appendChild(display);
+
+window.addEventListener("click",click);
+
+function click(e){
+    if(e.target.textContent==="AC"){
+        display.textContent="";
+    }
+    else if(e.target.nodeName==="BUTTON"){
+        display.textContent+=e.target.textContent;
+        storeFirstVariable(e);
+        storeOperator(e);
+        // storeSecondVariable(e);
+    }if(e.target.textContent=="="){
+        console.log("hhh");
+        let first=storeFirstVariable(e);
+        let opr=storeOperator(e);
+        let second=storeSecondVariable(e);
+        console.log(first,opr,second);
+        display.textContent=operate(opr,first,second);
+    }
+}
+
+let firstOperator="";
+let operator="";
+let secondOperator="";
+
+function storeFirstVariable(e){
+    firstOperator+=e.target.textContent;
+    return parseInt(firstOperator);
+}
+
+function storeOperator(e){
+    
+    
+    if([...e.target.classList].includes("operator")){
+        operator=e.target.textContent;
+        display.textContent="";
+    }
+        // e.target.classList.add("active-operator");
+        return  operator
+    
+}
+
+function storeSecondVariable(e){
+    secondOperator=display.textContent;
+    if([...e.target.classList].includes("equal")){
+        display.textContent="";
+    }
+    // console.log(parseInt(secondOperator));
+        return parseInt(secondOperator);
+    
+}

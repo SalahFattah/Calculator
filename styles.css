@@ -26,4 +26,14 @@ flex-wrap: wrap;
 .result{
     border: 10px solid black;
     height: 200px;
+    position: relative;
+}
+span{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 15px;
+}
+.active-operator{
+    background: gray;
 }
