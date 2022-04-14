@@ -1,0 +1,29 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.calculator{
+    height: 600px;
+    width: 400px;
+    /* border: 3px solid black; */
+}
+.operators{
+display: flex;
+flex-wrap: wrap;
+}
+
+.elem{
+    border: 0.1px solid black;
+}
+.result{
+    border: 1px solid black;
+    height: 200px;
+}
