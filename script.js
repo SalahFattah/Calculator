@@ -47,14 +47,14 @@ function createElements(){
         calcElements.appendChild(elem);
         switch(true){
             case i==0&&j==0:
-                elem.textContent="(";
-                elem.classList.add("left-parenthesis");
-                elem.classList.add("operator");
+                elem.textContent="AC";
+                elem.classList.add("clear");
+                // elem.classList.add("operator");
                 break;
             case i==0&&j==1:
-                elem.textContent=")";
-                elem.classList.add("right-parenthesis");
-                elem.classList.add("operator");
+                elem.textContent="+/-";
+                elem.classList.add("plus-minus");
+                // elem.classList.add("operator");
                 break;
             case i==0&&j==2:
                 elem.textContent="%";
@@ -62,8 +62,8 @@ function createElements(){
                 elem.classList.add("operator");
                 break;
             case i==0&&j==3:
-                elem.textContent="AC";
-                elem.classList.add("clear");
+                elem.textContent="C";
+                elem.classList.add("delete");
                 break;
 
             case i==1&&j==0:
@@ -130,7 +130,7 @@ function createElements(){
             case i==4&&j==2:
                 elem.textContent="=";
                 elem.classList.add("equal");
-                // elem.classList.add("operator");
+                elem.classList.add("operator");
                 break;
             case i==4&&j==3:
                 elem.textContent="+";
@@ -143,57 +143,99 @@ function createElements(){
 }
 createElements();
 
-let display=document.createElement("span");
+const display=document.createElement("span");
 document.querySelector(".result").appendChild(display);
 
-window.addEventListener("click",click);
+const previousOperation=document.createElement("div");
+previousOperation.classList.add("previous");
+document.querySelector(".result").insertBefore(previousOperation,display);
 
-function click(e){
-    if(e.target.textContent==="AC"){
-        display.textContent="";
-    }
-    else if(e.target.nodeName==="BUTTON"){
-        display.textContent+=e.target.textContent;
-        storeFirstVariable(e);
-        storeOperator(e);
-        // storeSecondVariable(e);
-    }if(e.target.textContent=="="){
-        console.log("hhh");
-        let first=storeFirstVariable(e);
-        let opr=storeOperator(e);
-        let second=storeSecondVariable(e);
-        console.log(first,opr,second);
-        display.textContent=operate(opr,first,second);
-    }
-}
+
+calcElements.addEventListener("click",click);
 
 let firstOperator="";
 let operator="";
 let secondOperator="";
-
-function storeFirstVariable(e){
-    firstOperator+=e.target.textContent;
-    return parseInt(firstOperator);
+let fullString="";
+function clear(){
+    if(result===Infinity){
+        display.textContent="Can't divide by 0";
+    }else{
+    display.textContent="";
+    }
+    previousOperation.textContent="";
+    fullString="";
+    firstOperator="";
+    operator="";
+    secondOperator="";
+    count=0;
+    result=0;
 }
 
-function storeOperator(e){
-    
-    
+function click(e){
+    if(e.target.textContent==="AC"){
+        clear();
+    }else if(e.target.textContent==="C"){
+        fullString=fullString.slice(0,fullString.length-1);
+        previousOperation.textContent=fullString;
+        operator="";
+        count=0;
+    }else{
+        // display.textContent+=e.target.textContent;
+        startOver(e);
+}
+}
+
+
+
+let count=0;
+let result=0;
+function startOver(e){
+    fullString+=e.target.textContent;
+    previousOperation.textContent=fullString;
     if([...e.target.classList].includes("operator")){
+        count++;
+        if(count>1){
+            console.log(fullString);
+            firstOperator=+fullString.slice(0,fullString.indexOf(operator));
+            secondOperator=+fullString.slice(fullString.indexOf(operator)+1,fullString.length-1);
+            if(!secondOperator){
+                
+                operator=e.target.textContent
+                fullString=firstOperator+operator;
+                previousOperation.textContent=fullString;
+                return
+            }
+            result=operate(operator,firstOperator,secondOperator);
+            console.log(result);
+            if(result===Infinity){
+                clear();
+                return;
+            }else{
+            display.textContent=result;
+            }
+            if(e.target.textContent==="="){
+                count=0;
+                fullString=result;
+                previousOperation.textContent="Ans";
+            }else{
+            operator=e.target.textContent;
+            fullString=result+operator;
+            previousOperation.textContent=fullString;
+            }
+            
+
+        }else{
+            if(e.target.textContent==="="){
+                count=0;
+                fullString=fullString.slice(0,fullString.indexOf("="));
+                display.textContent=fullString;
+                return;
+            }
         operator=e.target.textContent;
         display.textContent="";
+        console.log("capture first operator",operator);
+        }
+            
     }
-        // e.target.classList.add("active-operator");
-        return  operator
-    
-}
-
-function storeSecondVariable(e){
-    secondOperator=display.textContent;
-    if([...e.target.classList].includes("equal")){
-        display.textContent="";
-    }
-    // console.log(parseInt(secondOperator));
-        return parseInt(secondOperator);
-    
 }

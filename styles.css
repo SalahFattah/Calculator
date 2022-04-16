@@ -37,3 +37,7 @@ span{
 .active-operator{
     background: gray;
 }
+
+.previous{
+    position: absolute;
+}
