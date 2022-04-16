@@ -19,7 +19,7 @@ body{
     border: 1px solid #cbb1b1;
     border-radius: 5%;
     background: black;
-    padding: 2%;
+    padding: 1%;
 }
 .operators{
 display: flex;
