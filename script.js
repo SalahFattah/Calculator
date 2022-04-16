@@ -11,7 +11,7 @@ function multiply(a,b){
 }
 
 function divide(a,b){
-    return a/b;
+    return +(a/b).toFixed(5);
 }
 
 function operate(operator,a,b){
@@ -42,7 +42,7 @@ function createElements(){
         for(let j=0;j<4;j++){
         let elem=document.createElement("button");
         elem.classList.add("elem");
-        elem.style.width=parseInt(getComputedStyle(document.querySelector(".calculator")).getPropertyValue("width"))/4+"px";
+        elem.style.width=parseInt(getComputedStyle(document.querySelector(".calculator")).getPropertyValue("width"))/5+"px";
         elem.style.height=parseInt(getComputedStyle(document.querySelector(".calculator")).getPropertyValue("width"))/5+"px";
         calcElements.appendChild(elem);
         switch(true){
@@ -151,7 +151,7 @@ previousOperation.classList.add("previous");
 document.querySelector(".result").insertBefore(previousOperation,display);
 
 
-calcElements.addEventListener("click",click);
+document.querySelectorAll(".elem").forEach(elem=>elem.addEventListener("click",click));
 
 let firstOperator="";
 let operator="";
@@ -181,8 +181,8 @@ function click(e){
         operator="";
         count=0;
     }else{
-        // display.textContent+=e.target.textContent;
         startOver(e);
+        e.stopPropagation();
 }
 }
 
