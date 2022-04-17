@@ -230,19 +230,23 @@ let count=0;
 let result=0;
 function startOver(e){
     if(e.target.textContent==="." && display.textContent.includes(".")){
+        console.log("hooola");
         e.target.removeEventListener("click",click);
         e.target.addEventListener("click",click)
 
-    }if([...e.target.classList].includes("operator") && fullString.length===0){
+    }else{
+        fullString+=e.target.textContent;
+        previousOperation.textContent=fullString;
+        display.textContent+=e.target.textContent;
+    }  
+    if([...e.target.classList].includes("operator") && fullString.length===0){
         console.log("aaah")
         e.target.removeEventListener("click",click);
         e.target.addEventListener("click",click)
         return;
-}else{
-    fullString+=e.target.textContent;
-    previousOperation.textContent=fullString;
-    display.textContent+=e.target.textContent;
-}    if([...e.target.classList].includes("operator")){
+} 
+
+if([...e.target.classList].includes("operator")){
         count++;
         if(count>1){
             // console.log(fullString);
