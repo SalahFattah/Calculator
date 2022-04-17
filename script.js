@@ -189,10 +189,33 @@ function click(e){
     
     }
     else if(e.target.textContent==="+/-"){
-        if(display.textContent>0){
+        if(+display.textContent>=0){
             display.textContent="-"+display.textContent;
+            if(operator){
+                console.log('wowo')
+                console.log(operator);
+            fullString=fullString.slice(0,fullString.indexOf(operator)+1)+"-"+fullString.slice(fullString.indexOf(operator)+1);
+            previousOperation.textContent=fullString;
+            console.log(fullString);
 
-        }else{}
+            }else{
+            fullString=display.textContent;
+            console.log("hjh")
+            previousOperation.textContent=fullString;
+        }
+    }else{
+        display.textContent=-+display.textContent;
+        if(operator){
+            console.log("before",fullString)
+            fullString=fullString.slice(0,fullString.indexOf("-"))+fullString.slice(fullString.indexOf("-")+1);
+            console.log("ffff",fullString)
+            previousOperation.textContent=fullString;
+        }else{
+            fullString=display.textContent;
+            previousOperation.textContent=fullString;
+        }
+
+    }
     }
     
     else{
@@ -234,11 +257,17 @@ function startOver(e){
             secondOperator=+secondOperator;
             // console.log(secondOperator)
             if(!secondOperator){ 
+                if(e.target.textContent==="="){
+                fullString=fullString.slice(0,-1);
+                previousOperation.textContent=fullString;
+                display.textContent="";
+                return;
+                }else{
                 operator=e.target.textContent
                 fullString=firstOperator+operator;
                 previousOperation.textContent=fullString;
                 display.textContent=""
-                return
+                return}
             }
             result=operate(operator,firstOperator,secondOperator);
             
