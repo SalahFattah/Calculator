@@ -16,7 +16,7 @@ body{
 }
 .calculator{
     width: 350px;
-    border: 1px solid #cbb1b1;
+    border: 1px solid #3b3a3a;
     border-radius: 5%;
     background: black;
     padding: 1%;
@@ -40,6 +40,9 @@ justify-content: space-evenly;
 .result{
     height: 150px;
     position: relative;
+    border: 10px solid black;
+    background: #393939;
+    border-radius: 20px;
 }
 span{
     position: absolute;
@@ -47,6 +50,7 @@ span{
     bottom: 0;
     padding: 15px;
     font-size: 40px;
+    max-width: 400px;
 }
 .active-operator{
     background: gray;
@@ -60,6 +64,10 @@ span{
 
 .operator{
     background-color: #f69907;
+}
+.operator:hover{
+    background-color: #ffffff;
+    color: #f69907;
 }
 
 .percentage, .plus-minus,.clear, .delete{

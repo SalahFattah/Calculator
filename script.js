@@ -7,7 +7,7 @@ function substract(a,b){
 }
 
 function multiply(a,b){
-    return a*b;
+    return +(a*b).toFixed(5);
 }
 
 function divide(a,b){
@@ -49,17 +49,15 @@ function createElements(){
             case i==0&&j==0:
                 elem.textContent="AC";
                 elem.classList.add("clear");
-                // elem.classList.add("operator");
+                elem.style.width="140px";
+                elem.style.borderRadius="40px"
                 break;
             case i==0&&j==1:
-                elem.textContent="+/-";
-                elem.classList.add("plus-minus");
-                // elem.classList.add("operator");
+                elem.style.display="none"
                 break;
             case i==0&&j==2:
-                elem.textContent="%";
-                elem.classList.add("percentage");
-                elem.classList.add("operator");
+                elem.textContent="+/-";
+                elem.classList.add("plus-minus");
                 break;
             case i==0&&j==3:
                 elem.textContent="C";
@@ -159,7 +157,7 @@ let secondOperator="";
 let fullString="";
 function clear(){
     if(result===Infinity){
-        display.textContent="Can't divide by 0";
+        display.textContent="ERROR";
     }else{
     display.textContent="";
     }
@@ -176,11 +174,28 @@ function click(e){
     if(e.target.textContent==="AC"){
         clear();
     }else if(e.target.textContent==="C"){
+        if(previousOperation.textContent==="Ans"){
+        previousOperation.textContent="";
+        fullString="";
+    }
+        display.textContent=display.textContent.slice(0,display.textContent.length-1);
+        let sliced=fullString.slice(-1);
         fullString=fullString.slice(0,fullString.length-1);
         previousOperation.textContent=fullString;
+        if(!+sliced){
         operator="";
         count=0;
-    }else{
+    }
+    
+    }
+    else if(e.target.textContent==="+/-"){
+        if(display.textContent>0){
+            display.textContent="-"+display.textContent;
+
+        }else{}
+    }
+    
+    else{
         startOver(e);
         e.stopPropagation();
 }
@@ -191,29 +206,44 @@ function click(e){
 let count=0;
 let result=0;
 function startOver(e){
+    if(e.target.textContent==="." && display.textContent.includes(".")){
+        e.target.removeEventListener("click",click);
+        e.target.addEventListener("click",click)
+
+    }if([...e.target.classList].includes("operator") && fullString.length===0){
+        console.log("aaah")
+        e.target.removeEventListener("click",click);
+        e.target.addEventListener("click",click)
+        return;
+}else{
     fullString+=e.target.textContent;
     previousOperation.textContent=fullString;
-    if([...e.target.classList].includes("operator")){
+    display.textContent+=e.target.textContent;
+}    if([...e.target.classList].includes("operator")){
         count++;
         if(count>1){
-            console.log(fullString);
+            // console.log(fullString);
             firstOperator=+fullString.slice(0,fullString.indexOf(operator));
-            secondOperator=+fullString.slice(fullString.indexOf(operator)+1,fullString.length-1);
-            if(!secondOperator){
-                
+            secondOperator=fullString.slice(fullString.indexOf(operator)+1,fullString.length-1);
+            if(secondOperator==="0"){
+                console.log('hi')
+                result=Infinity;
+                clear();
+                return;
+            }
+            secondOperator=+secondOperator;
+            // console.log(secondOperator)
+            if(!secondOperator){ 
                 operator=e.target.textContent
                 fullString=firstOperator+operator;
                 previousOperation.textContent=fullString;
+                display.textContent=""
                 return
             }
             result=operate(operator,firstOperator,secondOperator);
-            console.log(result);
-            if(result===Infinity){
-                clear();
-                return;
-            }else{
+            
+            // console.log(result);
             display.textContent=result;
-            }
             if(e.target.textContent==="="){
                 count=0;
                 fullString=result;
@@ -222,6 +252,7 @@ function startOver(e){
             operator=e.target.textContent;
             fullString=result+operator;
             previousOperation.textContent=fullString;
+            display.textContent="";
             }
             
 
@@ -234,8 +265,7 @@ function startOver(e){
             }
         operator=e.target.textContent;
         display.textContent="";
-        console.log("capture first operator",operator);
         }
-            
-    }
+    }  
+
 }
